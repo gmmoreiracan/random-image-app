@@ -32,6 +32,6 @@ jobs:
         with:
           push: true
           tags: gmmeng/random-words-svc:latest
-          platforms: linux/amd64, linux/arm64, linux/x86_64
+          platforms: linux/amd64, linux/x86_64
           file: random-words-svc/Dockerfile
       
