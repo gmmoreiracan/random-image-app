@@ -12,9 +12,11 @@ spec:
       labels:
         app: word-suggestion-app
     spec:
+      imagePullSecrets:
+      - name: regcred
       containers:
       - name: word-suggestion-app
-        image: your-image-name:latest
+        image: docker.io/gmmeng/random-words-svc:latest
         ports:
         - containerPort: 3000
         env:

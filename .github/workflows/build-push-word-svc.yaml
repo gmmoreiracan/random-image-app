@@ -34,7 +34,4 @@ jobs:
           tags: gmmeng/random-words-svc:latest
           platforms: linux/amd64, linux/x86_64
           file: random-words-svc/Dockerfile
-      #read the manifest output of the step "Build and push" and save it to a file
-      - name: Read manifest
-        run: echo ${{ steps.build_and_push.outputs.digest }} > manifest.json
       
