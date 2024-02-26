@@ -1,0 +1,55 @@
+.App {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+}
+
+nav {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header {
+  background-image: url('https://img.reintech.io/variants/s2odbtfbi1vnj0v0lpk08uk9n9fl/e7b4ce09c703210ab8f75b017c7eaf0951c5a95b737ee8120602845c1c1d944b');
+  background-size: cover;
+  text-align: center;
+  padding: 100px 20px;
+  color: white;
+}
+
+header form {
+  display: inline-block;
+  margin-top: 20px;
+}
+
+header input {
+  padding: 10px;
+  width: 300px;
+  border: none;
+}
+
+header button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+main {
+  padding: 20px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 20px;
+}
+
+.image-grid img {
+  width: 100%;
+  height: auto;
+}

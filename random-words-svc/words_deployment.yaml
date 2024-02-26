@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-suggestion-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: word-suggestion-app
+  template:
+    metadata:
+      labels:
+        app: word-suggestion-app
+    spec:
+      containers:
+      - name: word-suggestion-app
+        image: your-image-name:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: word-suggestion-app
+spec:
+  selector:
+    app: word-suggestion-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
