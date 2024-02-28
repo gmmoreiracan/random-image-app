@@ -1,4 +1,4 @@
-name: word-svc build and push
+name: image-api-svc build and push
 
 on:
   push:
