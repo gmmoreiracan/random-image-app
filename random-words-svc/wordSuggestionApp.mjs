@@ -1,14 +1,21 @@
 import express from 'express';
 import axios from 'axios';
-import { context, setSpan, SpanKind, trace } from '@opentelemetry/api';
-import { NodeTracerProvider } from '@opentelemetry/node';
-import { SimpleSpanProcessor } from '@opentelemetry/tracing';
-import { OTLPExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { HoneycombExporter } from '@honeycombio/opentelemetry-node';
+import otelAPI from '@opentelemetry/api';
+import otelNode from '@opentelemetry/node';
+import otelTracing from '@opentelemetry/tracing';
+import otelExporter from '@opentelemetry/exporter-trace-otlp-http';
+import honeyOtel from '@honeycombio/opentelemetry-node';
+
+
+const  { context, setSpan, SpanKind, trace } = otelAPI;
+const {NodeTracerProvider} = otelNode;
+const {SimpleSpanProcessor} = otelTracing;
+const {OTLPTraceExporter} = otelExporter;
+//const { HoneycombExporter } = honeyOtel;
 
 // Initialize OpenTelemetry
 const provider = new NodeTracerProvider();
-provider.addSpanProcessor(new SimpleSpanProcessor(new HoneycombExporter({ serviceName: 'word-suggestion-app' ,apiKey: process.env.HONEYCOMB_API_KEY})));
+provider.addSpanProcessor(new SimpleSpanProcessor(new OTLPTraceExporter({ serviceName: 'word-suggestion-app' ,apiKey: process.env.HONEYCOMB_API_KEY})));
 provider.register();
 
 const tracer = trace.getTracer('default');
@@ -17,7 +24,7 @@ const app = express();
 app.get('/', async (req, res) => {
     const parentSpan = tracer.startSpan('main');
     try {
-        const response = await context.with(setSpan(context.active(), parentSpan), async () => {
+        const response = await context.with(trace.setSpan(context.active(), parentSpan), async () => {
             const span = tracer.startSpan('axios request', { kind: SpanKind.CLIENT });
             const response = await axios.get('https://random-word.ryanrk.com/api/en/word/random/5');
             span.end();
