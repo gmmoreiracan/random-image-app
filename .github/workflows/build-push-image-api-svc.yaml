@@ -3,7 +3,7 @@ name: word-svc build and push
 on:
   push:
     paths:
-      - 'random-words-svc/**'
+      - 'image-svc/**'
     branches:
       - 'main'
 
@@ -24,13 +24,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #log current directory
+      - name: Log current directory
+        run: pwd
       -
         name: Build and push
         id: build_and_push
         uses: docker/build-push-action@v5
         with:
           push: true
-          tags: gmmeng/random-words-svc:latest
+          tags: gmmeng/image-api-svc:latest
           platforms: linux/amd64, linux/x86_64
-          file: random-words-svc/Dockerfile
+          file: image-svc/Dockerfile
       

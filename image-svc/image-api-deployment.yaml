@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-api-app
+  template:
+    metadata:
+      labels:
+        app: image-api-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: image-api-app
+        image: docker.io/gmmeng/image-api-svc:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-api-svc
+spec:
+  selector:
+    app: image-api-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -5,7 +5,7 @@ FROM node:18
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY random-words-svc/. /app
+COPY image-svc/. /app
 
 # Install any needed packages specified in package.json
 RUN npm install
@@ -14,4 +14,4 @@ RUN npm install
 EXPOSE 3000
 
 # Define the command to run your app using CMD which defines your runtime
-CMD ["node", "wordSuggestionApp.mjs"]
+CMD ["node", "imageApiApp.mjs"]
