@@ -79,4 +79,4 @@ jobs:
           echo "SBOM: ${{ steps.sbom-generator.outputs.sbom }}"
           echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
           echo "Sending SBOM to ServiceNow API"
-            curl -X POST -H "Content-Type: application/json" -d @./frontend-svc.spdx.json ${{secrets.SERVICENOW_API_URL}}
+            curl -X POST -H "Content-Type: application/json" -d @/tmp/frontend-svc.spdx.json ${{secrets.SERVICENOW_API_URL}}
