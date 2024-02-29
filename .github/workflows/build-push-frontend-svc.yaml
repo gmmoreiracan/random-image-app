@@ -64,3 +64,11 @@ jobs:
         uses: anchore/sbom-action/publish-sbom@v0.15.8
         with:
           sbom-artifact-match: ".*\\.spdx$"
+      # Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
+      - name: Send SBOM to ServiceNow API
+        run: |
+          echo "Sending SBOM to ServiceNow API"
+          echo "SBOM: ${{ steps.sbom-generator.outputs.sbom }}"
+          echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
+          echo "Sending SBOM to ServiceNow API"
+          curl -X POST -H "Content-Type: application/json" -d '{"sbom": ${{ steps.sbom-generator.outputs.sbom }}, "imageDigest": ${{ steps.build_and_push.outputs.digest }}' ${{secrets.SERVICENOW_API_URL}}
