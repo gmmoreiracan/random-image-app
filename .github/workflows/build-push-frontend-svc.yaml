@@ -61,6 +61,7 @@ jobs:
         with:
           image: 'docker.io/gmmeng/frontend-svc:latest'
           artifact-name: 'frontend-svc.spdx.json'
+          output-file: '/tmp'
       - 
         uses: anchore/sbom-action/publish-sbom@v0.15.8
         with:
