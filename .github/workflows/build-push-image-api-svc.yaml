@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'image-svc/**'
+      - '.github/workflows/build-push-image-api-svc.yaml'
     branches:
       - 'main'
 
@@ -46,6 +47,6 @@ jobs:
   
       - 
         name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
