@@ -36,4 +36,16 @@ jobs:
           tags: gmmeng/frontend-svc:latest
           platforms: linux/amd64, linux/x86_64
           file: frontend-app/Dockerfile
-      
+      -
+        name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/frontend-svc:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+  
+      - 
+        name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'

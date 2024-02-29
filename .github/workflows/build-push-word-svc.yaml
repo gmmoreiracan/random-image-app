@@ -33,4 +33,15 @@ jobs:
           tags: gmmeng/random-words-svc:latest
           platforms: linux/amd64, linux/x86_64
           file: random-words-svc/Dockerfile
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'docker.io/gmmeng/random-words-svc:latest'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
       
