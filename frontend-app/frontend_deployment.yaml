@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: frontend-app-container
+        image: docker.io/gmmeng/frontend-svc:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-app-svc
+spec:
+  selector:
+    app: frontend-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort

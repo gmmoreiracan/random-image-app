@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: word-suggestion-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: word-suggestion-app
+  template:
+    metadata:
+      labels:
+        app: word-suggestion-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: word-suggestion-app
+        image: docker.io/gmmeng/random-words-svc:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: image-api-app
+  template:
+    metadata:
+      labels:
+        app: image-api-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: image-api-app
+        image: docker.io/gmmeng/image-api-svc:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-app
+  template:
+    metadata:
+      labels:
+        app: frontend-app
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: frontend-app-container
+        image: docker.io/gmmeng/frontend-svc:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: honeycomb-api-key
+              key: api-key
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: word-suggestion-app
+spec:
+  selector:
+    app: word-suggestion-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-app-svc
+spec:
+  selector:
+    app: frontend-app
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-api-svc
+spec:
+  selector:
+    app: image-api-app
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
