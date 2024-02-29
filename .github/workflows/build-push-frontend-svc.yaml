@@ -66,6 +66,12 @@ jobs:
         uses: anchore/sbom-action/publish-sbom@v0.15.8
         with:
           sbom-artifact-match: ".*\\.spdx$"
+      # Step to output the exact location of file frontend-svc.spdx.json by running a command to find the file and providing the output to the next step.
+      - name: Output SBOM file location
+        run: |
+          echo "SBOM file location: $(find /tmp -name frontend-svc.spdx.json)"
+          echo "::set-output name=sbom::$(find /tmp -name frontend-svc.spdx.json)"
+      
       # Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
       - name: Send SBOM to ServiceNow API
         run: |
