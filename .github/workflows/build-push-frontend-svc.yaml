@@ -81,3 +81,16 @@ jobs:
           echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
           echo "Sending SBOM to ServiceNow API"
           curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"${{ steps.build_and_push.outputs.digest }}\",\"sbom\":$(jq '.packages | [.[] | {name: .name,versionInfo: .versionInfo, supplier: .supplier}]' /tmp/frontend-svc.spdx.json)}" ${{secrets.SERVICENOW_API_URL}}
+    outputs:
+      digest: ${{ steps.build_and_push.outputs.digest}}
+    
+
+  sbom-sender:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send SBOM to ServiceNow API
+        uses: gmmoreiracan/servicenow-sbom-sender@main
+        with:
+          imagePath: gmmeng/frontend-svc:latest
+          imageDigest: ${{ needs.docker.outputs.digest }}
