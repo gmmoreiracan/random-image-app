@@ -3,7 +3,6 @@ name: frontend-svc build and push copy
 on:
   push:
     paths:
-      - 'frontend-app/**'
       - '.github/workflows/build-push-frontend-svc-copy.yaml'
     branches:
       - 'main'

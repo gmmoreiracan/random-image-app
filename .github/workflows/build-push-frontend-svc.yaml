@@ -73,10 +73,11 @@ jobs:
           echo "::set-output name=sbom::$(find /tmp -name frontend-svc.spdx.json)"
       
       # Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
+      ## Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
       - name: Send SBOM to ServiceNow API
         run: |
           echo "Sending SBOM to ServiceNow API"
-          echo "SBOM: ${{ steps.sbom-generator.outputs.sbom }}"
+          echo "SBOM: $(cat /tmp/frontend-svc.spdx.json)"
           echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
           echo "Sending SBOM to ServiceNow API"
-            curl -X POST -H "Content-Type: application/json" -d @/tmp/frontend-svc.spdx.json ${{secrets.SERVICENOW_API_URL}}
+          curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"${{ steps.build_and_push.outputs.digest }}\",\"sbom\":$(jq '.packages | [.[] | {name: .name,versionInfo: .versionInfo, supplier: .supplier}]' /tmp/frontend-svc.spdx.json)}" ${{secrets.SERVICENOW_API_URL}}

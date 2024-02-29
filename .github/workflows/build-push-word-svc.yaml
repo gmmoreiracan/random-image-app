@@ -53,4 +53,14 @@ jobs:
         name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: 'docker.io/gmmeng/frontend-svc:latest'
+          image: 'docker.io/gmmeng/random-words-svc:latest'
+          artifact-name: 'random-words-svc.spdx.json'
+          output-file: '/tmp/random-words-svc.spdx.json'
+      - name: Send SBOM to ServiceNow API
+        run: |
+          echo "Sending SBOM to ServiceNow API"
+          echo "SBOM: $(cat /tmp/random-words-svc.json)"
+          echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
+          echo "Sending SBOM to ServiceNow API"
+          curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"${{ steps.build_and_push.outputs.digest }}\",\"sbom\":$(jq '.packages | [.[] | {name: .name,versionInfo: .versionInfo, supplier: .supplier}]' /tmp/random-words-svc.spdx.json)}" ${{secrets.SERVICENOW_API_URL}}
+    
