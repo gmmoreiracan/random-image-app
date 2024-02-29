@@ -25,6 +25,7 @@ WORKDIR /app
 # Install serve to serve the application on a static server
 RUN npm install -g serve
 
+
 # Copy the build output from the first stage build
 COPY --from=0 /app/build .
 
