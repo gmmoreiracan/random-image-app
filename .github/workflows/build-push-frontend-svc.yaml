@@ -1,0 +1,39 @@
+name: frontend-svc build and push
+
+on:
+  push:
+    paths:
+      - 'frontend-app/**'
+    branches:
+      - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #log current directory
+      - name: Log current directory
+        run: pwd
+      -
+        name: Build and push
+        id: build_and_push
+        uses: docker/build-push-action@v5
+        with:
+          push: true
+          tags: gmmeng/frontend-svc:latest
+          platforms: linux/amd64, linux/x86_64
+          file: frontend-app/Dockerfile
+      

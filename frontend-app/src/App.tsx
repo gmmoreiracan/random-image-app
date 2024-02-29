@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
 import './App.css';
-import axios from 'axios';
 
 const App: React.FC = () => {
 
   const [keyword, setKeyword] = useState<string>('');
   const [images, setImages] = useState<string[]>([]);
-  const axiosConfig = {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Access-Control-Allow-Origin': 'localhost',
-      'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-    },
-  };
+
   const fetchImages = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       console.log(keyword);
-      // const response = await axios.get(`http://127.0.0.1:3000/${keyword}`,axiosConfig);
-      // const response = await axios.get(`http://127.0.0.1:3000`,axiosConfig);
-      const response = await fetch(`http://127.0.0.1:3001/${keyword}`, {
+      const response = await fetch(`http://image-api-svc/${keyword}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
