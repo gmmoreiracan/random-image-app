@@ -38,7 +38,7 @@ jobs:
       - name: Send SBOM to ServiceNow API
         run: |
           echo "Sending SBOM to ServiceNow API"
-          echo "SBOM: @/tmp/frontend-svc.spdx.json"
+          echo "SBOM: $(cat /tmp/frontend-svc.spdx.json)"
           echo "Image Digest: sha256:19b1b18c3640a622dbd1929b1e8490d95ade6313b9851a3b5ce84de746120df5"
           echo "Sending SBOM to ServiceNow API"
-          curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"sha256:19b1b18c3640a622dbd1929b1e8490d95ade6313b9851a3b5ce84de746120df5\",\"sbom\":{\"name\":\"test\",\"versionInfo\":\"1.0.0\",\"supplier\":\"Red Hat\"}}" ${{secrets.SERVICENOW_API_URL}}
+          curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"sha256:19b1b18c3640a622dbd1929b1e8490d95ade6313b9851a3b5ce84de746120df5\",\"sbom\":$(jq '.packages | [.[] | {name: .name,versionInfo: .versionInfo, supplier: .supplier}]' /tmp/frontend-svc.spdx.json)}" ${{secrets.SERVICENOW_API_URL}}
