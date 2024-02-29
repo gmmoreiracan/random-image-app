@@ -10,7 +10,7 @@ const App: React.FC = () => {
     event.preventDefault();
     try {
       console.log(keyword);
-      const response = await fetch(`https://image-api-svc/${keyword}`, {
+      const response = await fetch(`https://image-api-svc:3000/${keyword}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
