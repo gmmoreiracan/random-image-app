@@ -56,6 +56,11 @@ jobs:
           sarif_file: 'trivy-results.sarif'
       -
         name: Generate SBOM
-        uses: anchore/sbom-action@v0
+        id: sbom-generator
+        uses: anchore/sbom-action@v0.15.8
         with:
           image: 'docker.io/gmmeng/frontend-svc:latest'
+      - 
+        uses: anchore/sbom-action/publish-sbom@v0.15.8
+        with:
+          sbom-artifact-match: ".*\\.spdx$"
