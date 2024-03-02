@@ -84,7 +84,6 @@ jobs:
     outputs:
       digest: ${{ steps.build_and_push.outputs.digest}}
     
-
   sbom-sender:
     needs: docker
     runs-on: ubuntu-latest
