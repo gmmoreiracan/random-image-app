@@ -41,46 +41,6 @@ jobs:
           tags: gmmeng/frontend-svc:latest
           platforms: linux/amd64, linux/x86_64
           file: frontend-app/Dockerfile
-      -
-        name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'docker.io/gmmeng/frontend-svc:latest'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-  
-      - 
-        name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: 'trivy-results.sarif'
-      -
-        name: Generate SBOM
-        id: sbom-generator
-        uses: anchore/sbom-action@v0.15.8
-        with:
-          image: 'docker.io/gmmeng/frontend-svc:latest'
-          artifact-name: 'frontend-svc.spdx.json'
-          output-file: '/tmp/frontend-svc.spdx.json'
-      - 
-        uses: anchore/sbom-action/publish-sbom@v0.15.8
-        with:
-          sbom-artifact-match: ".*\\.spdx$"
-      # Step to output the exact location of file frontend-svc.spdx.json by running a command to find the file and providing the output to the next step.
-      - name: Output SBOM file location
-        run: |
-          echo "SBOM file location: $(find /tmp -name frontend-svc.spdx.json)"
-          echo "::set-output name=sbom::$(find /tmp -name frontend-svc.spdx.json)"
-      
-      # Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
-      ## Send spdx file to ServiceNow API. Only data contained inside JSON's "packages" array will be sent to ServiceNow API. Also need to provide the image digest from step "build_and_push" to the ServiceNow API.
-      - name: Send SBOM to ServiceNow API
-        run: |
-          echo "Sending SBOM to ServiceNow API"
-          echo "SBOM: $(cat /tmp/frontend-svc.spdx.json)"
-          echo "Image Digest: ${{ steps.build_and_push.outputs.digest }}"
-          echo "Sending SBOM to ServiceNow API"
-          curl -X POST -H "Content-Type: application/json" -d "{\"imageDigest\":\"${{ steps.build_and_push.outputs.digest }}\",\"sbom\":$(jq '.packages | [.[] | {name: .name,versionInfo: .versionInfo, supplier: .supplier}]' /tmp/frontend-svc.spdx.json)}" ${{secrets.SERVICENOW_API_URL}}
     outputs:
       digest: ${{ steps.build_and_push.outputs.digest}}
     
