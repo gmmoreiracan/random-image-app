@@ -1,5 +1,4 @@
 name: frontend-svc build and push
-
 on:
   push:
     paths:

@@ -1,5 +1,4 @@
 name: image-api-svc build and push
-
 on:
   push:
     paths:
