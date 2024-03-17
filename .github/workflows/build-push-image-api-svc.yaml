@@ -38,6 +38,8 @@ jobs:
         with:
           push: true
           file: image-svc/Dockerfile
+          build-args:
+            IMAGEAPI_BASE_IMAGE=${{ vars.IMAGE_API_BASE_TAG}}
           tags: gmmeng/image-api-svc:latest
           platforms: linux/amd64, linux/x86_64
           
@@ -51,7 +53,7 @@ jobs:
       - name: Send SBOM to ServiceNow API
         uses: gmmoreiracan/servicenow-sbom-sender@main
         with:
-          imagePath: node:18
+          imagePath: ${{ vars.IMAGE_API_BASE_TAG}}
   sbom-sender-app:
     needs: docker
     runs-on: ubuntu-latest

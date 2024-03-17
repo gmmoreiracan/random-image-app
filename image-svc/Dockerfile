@@ -1,5 +1,6 @@
 # Use an official Node.js runtime as the base image
-FROM node:18
+ARG IMAGEAPI_BASE_IMAGE=node:18
+FROM $IMAGEAPI_BASE_IMAGE
 
 # Set the working directory in the container to /app
 WORKDIR /app
