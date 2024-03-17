@@ -51,7 +51,7 @@ jobs:
       - name: Send SBOM to ServiceNow API
         uses: gmmoreiracan/servicenow-sbom-sender@main
         with:
-          imagePath: node:18
+          imagePath: node:lts-alpine3.19
   sbom-sender-app:
     needs: docker
     runs-on: ubuntu-latest
