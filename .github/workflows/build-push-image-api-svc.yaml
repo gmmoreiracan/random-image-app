@@ -44,7 +44,15 @@ jobs:
     outputs:
       digest: ${{ steps.build_and_push.outputs.digest}}
       
-  sbom-sender:
+  sbom-sender-base:
+    needs: docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send SBOM to ServiceNow API
+        uses: gmmoreiracan/servicenow-sbom-sender@main
+        with:
+          imagePath: node:18
+  sbom-sender-app:
     needs: docker
     runs-on: ubuntu-latest
     steps:
