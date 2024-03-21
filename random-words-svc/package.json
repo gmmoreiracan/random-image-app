@@ -4,7 +4,7 @@
     "@opentelemetry/api": "^1.7.0",
     "@opentelemetry/core": "^1.21.0",
     "@opentelemetry/exporter-jaeger": "^1.21.0",
-    "@opentelemetry/exporter-trace-otlp-http": "^0.48.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.49.1",
     "@opentelemetry/node": "^0.24.0",
     "@opentelemetry/tracing": "^0.24.0",
     "axios": "^1.6.7",
